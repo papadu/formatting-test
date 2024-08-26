@@ -31,6 +31,7 @@ pipeline {
 
     post {
         always {
+            recordIssues(tool: git-clang-format-parser())
             // Clean up workspace after build
             cleanWs()
         }
