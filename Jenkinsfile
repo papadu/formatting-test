@@ -29,7 +29,9 @@ pipeline {
 
     post {
         always {
-            recordIssues enabledForFailure: true, tool: git-clang-format-parser()
+            recordIssues sourceCodeEncoding: 'UTF-8', tool: groovyScript(parserId: 'git-clang-format-parser', reportEncoding:'UTF-8')
+
+
             // Clean up workspace after build
             cleanWs()
         }
