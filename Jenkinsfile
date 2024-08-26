@@ -13,7 +13,7 @@ pipeline {
             steps {
                 script {
                     // Run git clang-format and store the result
-                    def result = sh(script: 'git clang-format --diff', returnStdout: true).trim()
+                    def result = sh(script: 'git clang-format HEAD~1 --diff', returnStdout: true).trim()
 
                     // Print the result to the console
                     echo "git clang-format output:\n${result}"
