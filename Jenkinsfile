@@ -1,3 +1,16 @@
+def config = io.jenkins.plugins.analysis.warnings.groovy.ParserConfiguration.getInstance()
+
+if(!config.contains('git-clang-format-parser2')){
+    def newParser = new io.jenkins.plugins.analysis.warnings.groovy.GroovyParser(
+        'git-clang-format-parser2',
+        'Git Clang-Format Parser',
+        '^diff\s--git\sa/([\w/.]+)[\S\s\n\t\r\n\f.]*?^@@\s-(\d+),(\d+)[\S\s\n\t\r\n\f.]*?^((?:^[+-].*$\n?)+)',
+        'return builder.setFileName(matcher.group(1)).setLineStart(Integer.parseInt(matcher.group(2))).setMessage(matcher.group(4)).buildOptional();',
+        ""
+    )
+    config.addParser(newParser)
+}
+
 pipeline {
     agent any
 
@@ -29,7 +42,7 @@ pipeline {
 
     post {
         always {
-            recordIssues sourceCodeEncoding: 'UTF-8', tool: groovyScript(parserId: 'git-clang-format-parser', reportEncoding:'UTF-8')
+            recordIssues sourceCodeEncoding: 'UTF-8', tool: groovyScript(parserId: 'git-clang-format-parser2', reportEncoding:'UTF-8')
 
 
             // Clean up workspace after build
